@@ -6,7 +6,7 @@ const getRecipesHandler = async (req, res) => {
       const result = name ? await searchRecipeByName(name) : await getAllRecipes(); 
     res.status(200).json(result);
     } catch (error) {
-      res.status(400).json({error: error.message})
+      res.status(401).json({error: error.message})
     }
     
 }
@@ -18,17 +18,17 @@ const getRecipeHandler = async (req, res) => {
       const recipe = await getRecipeById(id, source);
       res.status(200).json(recipe);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(402).json({ error: error.message });
     }
   };
 
 const createRecipeHandler = async (req, res) => {
     try {
-        const {title, summary,healthScore, steps} = req.body
-        const newRecipe = await createRecipe(title, summary,healthScore, steps)
-    res.status(200).json(newRecipe)
+        const {title, summary,healthScore, steps, diets} = req.body
+        const newRecipe = await createRecipe(title, summary,healthScore, steps, diets)
+    res.status(200).send("La receta fue creada exitosamente")
     } catch (error) {
-        res.status(400).json({error: error.message})
+        res.status(403).json({error: error.message})
     }    
 }
 
