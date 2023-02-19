@@ -1,94 +1,126 @@
 const { Recipe } = require("../db");
 const axios = require("axios");
-const { DB_APIKEY } = process.env; 
+const { DB_APIKEY } = process.env;
+const data = require("../Auxiliar/datos");
 
-
-// var getAllRecipesFromApi =
 
 // ------------------> POST-CREATE-RECIPE-HANDLER ------------------>
-const createRecipe = async (title, summary, healthScore, steps, diets) =>
-  await Recipe.create({ title, summary, healthScore, steps, diets });
+const createRecipe = async (title, summary, healthScore, steps, diets, image) =>
+  await Recipe.create({
+    title,
+    summary,
+    healthScore,
+    steps,
+    diets,
+    image,
+  });
+
+
 // <------------------ POST-CREATE-RECIPE-HANDLER <------------------
 
-
-  // ------------------> GET-RECIPE-HANDLER ------------------>
+// ------------------> GET-RECIPE-HANDLER ------------------>
 const getRecipeById = async (id, source) => {
-  const recipeRaw = 
+  let recipeRaw =
     source === "api"
-      ? (await axios.get(`https://api.spoonacular.com/recipes/${id}/information${DB_APIKEY}&number=100`))      
-      //https://jsonplaceholder.typicode.com/users/${id}
-          .data
-      : await [Recipe.findByPk(id)];
-      //: await [Recipe.findByPk(id),{
-      //   include: {
-      //     model: Diet,
-      //     attributes: ["name"]
-      //   }
-      // }];
-  const recipe = cleanInfo([recipeRaw])      
-  return recipe;
+    ? data // <---------------------------------------COMENTAR ESTOOOOOOOO (VER ACTIONS)
+      // ? (
+      //     await axios.get(
+      //       `https://api.spoonacular.com/recipes/${id}/information${DB_APIKEY}`
+      //     )
+      //   ).data
+      : await Recipe.findByPk(id);
+ 
+  if (source === "api") {
+    let filtrado = recipeRaw.filter(r => r.id == id) // <---------------COMENTAR ESTOOOOOOOO (VER ACTIONS)
+    // console.log("LALALAALLALALAL", lalala);
+    // console.log("IDDDDDDDDDDDD", id);
+    var recipe = cleanInfo(filtrado); // <---------- MODIFICAR cleanInfo([recipeRaw]) (VER ACTIONS)
+    //console.log("RECIPEEEEE", recipe);
+  }
+  if (source === "api") {
+    return recipe[0];
+  } else {
+    // console.log("RECETA FILTRADA DE LA DB POR ID", recipeRaw.dataValues);
+    return recipeRaw;
+  }
 };
 // <------------------ GET-RECIPE-HANDLER <------------------
 
 // ------------------> GET-RECIPES-HANDLER ------------------>
 // *** filtrado de datos ***
-const cleanInfo = (arr) => 
+const cleanInfo = (arr) =>
   arr.map((e) => {
     return {
       id: e.id,
       title: e.title,
-      diets: e.diets,
+      diets: e.diets.length ? e.diets : [],
       summary: e.summary,
       healthScore: e.healthScore,
-      steps: e.analyzedInstructions.map((s) => `${s.number}: ${s.step}`),
+      steps: e.analyzedInstructions.length
+        ? e.analyzedInstructions[0].steps
+        : [],
       image: e.image,
-      created: false
+      created: false,
     };
   });
+
+// const cleanSteps = (arr) =>
+// arr[0].steps.map((e) => {
+//   return {
+//     number: e.number,
+//     step: e.step
+//   }
+// })
+//   analyzed[0].steps                      map(x => x.steps.)
+// analyzed = [ { steps = [ { number, step } ] } ]
 // *** filtrado de datos ***
 
 const getAllRecipes = async () => {
   const dataBaseRecipes = await Recipe.findAll();
-  const apiRecipesRaw = (
-    await axios.get(`https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`)
-  ).data;
-  const apiRecipes = cleanInfo(apiRecipesRaw.results);
+  const apiRecipesRaw = data; // <-------------- COMENTAR (VER ACTIONS)
+  // console.log("-------------->data", apiRecipesRaw)
+  // const apiRecipesRaw = (
+  //   await axios.get(
+  //     `https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`
+  //   )
+  // ).data.results;
+  // console.log("Deberia ser un array de recetas --->", apiRecipesRaw);
+  const apiRecipes = cleanInfo(apiRecipesRaw);
+  
   return [...dataBaseRecipes, ...apiRecipes];
 };
 
 const searchRecipeByName = async (name) => {
-  const dataBaseRecipesRaw = await Recipe.findAll();
-  const dataBaseRecipes = []
-  dataBaseRecipesRaw.forEach(recipe => {
-    recipe.title.includes(name[0].toUpperCase() + name.slice(1)) ? dataBaseRecipes.push(recipe) : null
-})
-  const apiRecipesRaw = (
-    await axios.get(`https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`)
-  ).data;
-  const apiRecipes = []
-  cleanInfo(apiRecipesRaw.results).forEach(recipe => {
-    recipe.title.includes(name[0].toUpperCase() + name.slice(1)) ? apiRecipes.push(recipe) : null
-  })
+  const allRecipes = await getAllRecipes();
+  let filtrando = allRecipes.filter((r) => r.title.includes(name)); 
+  if (filtrando.length) {
+    return filtrando;
+  } else {
+    return "No hay coincidencias";
+  }
+};
 
-  return [...dataBaseRecipes, ...apiRecipes];
-}
+const searchRecipeByDiet = async (diet) => {
+  const allRecipes = await getAllRecipes();
+  let filtrado = [];
 
-const getRecipeByDiet = async (diet) => {
-  const dataBaseRecipesRaw = await Recipe.findAll();
-  const dataBaseRecipes = []
-  dataBaseRecipesRaw.forEach(recipe => {
-    recipe.diets.includes(diet) ? dataBaseRecipes.push(recipe) : null
-})
-  const apiRecipesRaw = (
-    await axios.get(`https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`)
-  ).data;
-  const apiRecipes = []
-  cleanInfo(apiRecipesRaw.results).forEach(recipe => {
-    recipe.diets.includes(diet) ? apiRecipes.push(recipe) : null
-  })
+  for (let i = 0; i < allRecipes.length; i++) {
+    if (allRecipes[i].diets.includes(diet)) filtrado.push(allRecipes[i]);    
+  }
 
-  return [...dataBaseRecipes, ...apiRecipes];
-}
+  // console.log("FILTRANDOOOOOOOOO",filtrando)
+
+  return filtrado;
+};
+/*
+
+*/
 // <------------- GET-RECIPES-HANDLER <-------------
 
-module.exports = { createRecipe, getRecipeById, getAllRecipes, searchRecipeByName, getRecipeByDiet };
+module.exports = {
+  createRecipe,
+  getRecipeById,
+  getAllRecipes,
+  searchRecipeByName,
+  searchRecipeByDiet,
+};

@@ -6,8 +6,8 @@ import {Route, useLocation} from "react-router-dom"
 function App() {
   const location = useLocation()
   return (
-    <div className="App">
-      {location.pathname !== "/" && <NavBar />}
+    <div >
+      {location.pathname !== "/" && <NavBar />}     
       <Route path="/home" render={() => <Home />} />
       <Route exact path="/" render={() => <Login />} />
       <Route path='/detail/:id' render={() => <Detail />} />      

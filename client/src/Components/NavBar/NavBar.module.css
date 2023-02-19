@@ -1,8 +1,71 @@
-.mainContainer{
+.mainContainer {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    background-color: aquamarine;
-    border-radius: 15px;
-    border: 1px solid black;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    background-color: antiquewhite;
+    padding: 1rem 3rem;
+    box-shadow: 0px 5px 10px 0px rgb(0 0 0 / 20%);
+    margin-bottom: 2rem;
+}
+
+.logo img {
+    width: 60px;
+}
+
+.btnCustom {
+    text-decoration: none;
+}
+
+.cssbuttons_io_button {
+    background: #f0c284;
+    color: white;
+    font-family: inherit;
+    padding: 0.35em;
+    padding-left: 1.2em;
+    font-size: 17px;
+    font-weight: 500;
+    border-radius: 0.9em;
+    border: none;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    box-shadow: inset 0 0 1.6em -0.6em #f0c284;
+    overflow: hidden;
+    position: relative;
+    height: 2.8em;
+    padding-right: 3.3em;
+}
+
+.cssbuttons_io_button .icon {
+    background: antiquewhite;
+    margin-left: 1em;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.2em;
+    width: 2.2em;
+    border-radius: 0.7em;
+    box-shadow: 0.1em 0.1em 0.6em 0.2em #f0c284;
+    right: 0.3em;
+    transition: all 0.3s;
+}
+
+.cssbuttons_io_button:hover .icon {
+    width: calc(100% - 0.6em);
+}
+
+.cssbuttons_io_button .icon svg {
+    width: 1.1em;
+    transition: transform 0.3s;
+    color: #f0c284;
+}
+
+.cssbuttons_io_button:hover .icon svg {
+    transform: translateX(0.1em);
+}
+
+.cssbuttons_io_button:active .icon {
+    transform: scale(0.95);
 }

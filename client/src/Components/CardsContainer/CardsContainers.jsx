@@ -1,13 +1,11 @@
-import React from 'react'
-import Card from '../Card/Card'
-import style from "./CardsContainer.module.css"
-import {useSelector} from "react-redux"
-
+import React from "react";
+import Card from "../Card/Card";
+import style from "./CardsContainer.module.css";
+import { useSelector } from "react-redux";
 
 export default function CardsContainer() {
- 
-  const recipes = useSelector(state => state.recipes)
-  console.log("CardContainer-> recipes", recipes)
+  const recipes = useSelector((state) => state.recipes);
+
   return (
     <div className={style.container}>
         {recipes.map((r) => {
@@ -20,5 +18,5 @@ export default function CardsContainer() {
                         />
         })}
     </div>
-  )
+  );
 }

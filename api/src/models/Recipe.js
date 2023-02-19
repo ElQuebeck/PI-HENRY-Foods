@@ -15,16 +15,19 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     diets: {
-      type: DataTypes.STRING
+      type: DataTypes.ARRAY(DataTypes.STRING)
     },
     summary:{
       type: DataTypes.TEXT
     },
-    healthscore:{
+    healthScore:{
       type: DataTypes.INTEGER
     },
     steps:{
       type:DataTypes.STRING
+      },
+      image:{
+        type: DataTypes.STRING
       },
     created: {
       type: DataTypes.BOOLEAN,
