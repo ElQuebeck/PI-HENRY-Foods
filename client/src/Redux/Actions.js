@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export const GET_RECIPES = "GET_RECIPES";
 export const GET_RECIPE_BY_ID = "GET_RECIPE_BY_ID";
@@ -7,6 +8,8 @@ export const GET_RECIPES_BY_DIET = "GET_RECIPES_BY_DIET";
 export const GET_RECIPES_BY_NAME = "GET_RECIPES_BY_NAME";
 export const GET_COMB_NAME_AND_DIET = "GET_COMB_NAME_AND_DIET";
 export const ORDER_RECIPES = "ORDER_RECIPES"
+
+
 
 export const getRecipes = () => { 
   return async (dispatch) => {
@@ -36,11 +39,10 @@ export const getRecipeByName = (name) => {
   };
 }
 
-export const orderRecipes = (orderType) => {
-  return async (dispatch) => {
-    dispatch({type: ORDER_RECIPES, payload: orderType})
-  }
-}
+export const orderRecipes = (orderType) =>{  
+  return {type: ORDER_RECIPES, payload: orderType} 
+ }
+ 
 
 
 export const getRecipesByDiet = (diet) => {
@@ -53,12 +55,12 @@ export const getRecipesByDiet = (diet) => {
 };
 
 export const searchByNameAndFilterByDiet = (diet, name) => {
-  return async (dispatch) => {
-    const searchByName = await getRecipeByName(name);
+  return async (dispatch) => {    
+    const recipesByName = await axios.get(`http://localhost:3001/recipes?name=${name}`);    
     const filtrando = [];
-    for (let i = 0; i < searchByName.length; i++) {
-      if (searchByName[i].diets.includes(diet)) filtrando.push(searchByName[i]);
-    }
+    for (let i = 0; i < recipesByName.data.length; i++) {
+      if (recipesByName.data[i].diets.includes(diet)) filtrando.push(recipesByName.data[i]);
+    }    
     dispatch({ type: GET_COMB_NAME_AND_DIET, payload: filtrando });
   };
 };

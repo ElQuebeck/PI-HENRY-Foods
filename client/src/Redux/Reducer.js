@@ -5,7 +5,7 @@ import {
   GET_RECIPES_BY_DIET,
   GET_RECIPES_BY_NAME,
   GET_COMB_NAME_AND_DIET,
-  ORDER_RECIPES
+  ORDER_RECIPES,
 } from "./Actions";
 // import {recipes} from "../Auxiliar/DatosPrueba"
 
@@ -13,7 +13,7 @@ export const initialState = {
   recipes: [],
   recipeDetail: [],
   dietsList: [],
-  caca: []
+  activador: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -30,44 +30,81 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, recipeDetail: action.payload };
     case GET_DIETS:
       return { ...state, dietsList: action.payload };
-      case ORDER_RECIPES:
-        if (action.payload === "a-z") {
-          const orderAZ = state.recipes.sort(function (a, b) {
-            if (a.title.toLowerCase() < b.title.toLowerCase()) {
+    case ORDER_RECIPES:
+      // if (action.payload === "default")
+      //   return { ...state, recipes: state.recipes };
+      if (action.payload === "Alfabeticamente de A-z") {
+        return {
+          ...state,
+          recipes: state.recipes.sort(function (a, b) {
+            a = a.title.toLowerCase();
+            b = b.title.toLowerCase();
+            if (a < b) {
               return -1;
             }
-            if (a.title.toLowerCase() > b.title.toLowerCase()) {
+            if (a > b) {
               return 1;
             }
             return 0;
-          });
-          return {...state, recipes: orderAZ}
-        }
-        if (action.payload === "z-a") {
-          const orderZA = state.recipes.sort(function (a, b) {
-            if (a.title.toLowerCase() > b.title.toLowerCase()) {
+          }),
+          activador: true
+        };
+      }
+
+      if (action.payload === "Alfabeticamente de Z-a") {
+        return {
+          ...state,
+          recipes: state.recipes.sort(function (a, b) {
+            a = a.title.toLowerCase();
+            b = b.title.toLowerCase();
+            if (b < a) {
               return -1;
             }
-            if (a.title.toLowerCase() < b.title.toLowerCase()) {
+            if (b > a) {
               return 1;
             }
             return 0;
-          });
-          return {...state, recipes: orderZA}
-        }
-        if (action.payload === "menor-mayor") {
-          const orderMenMay = state.recipes.sort(function (a, b) {
-           return a.healthScore-b.healthScore;
-          });
-          return {...state, recipes: orderMenMay}
-        }
-        if (action.payload === "mayor-menor") {
-          const orderMayMen = state.recipes.sort(function (a, b) {
-           return a.healthScore-b.healthScore;
-          });
-          return {...state, recipes: orderMayMen}
-        }
-         
+          }),
+          activador: true
+        };
+      }
+
+      if (action.payload === "Salud de Menor a Mayor") {
+        return {
+          ...state,
+          recipes: state.recipes.sort(function (a, b) {
+            a = a.healthScore;
+            b = b.healthScore;
+            if (a < b) {
+              return -1;
+            }
+            if (a > b) {
+              return 1;
+            }
+            return 0;
+          }),
+          activador: true
+        };
+      }
+
+      if (action.payload === "Salud de Mayor a Menor") {
+        return {
+          ...state,
+          recipes: state.recipes.sort(function (a, b) {
+            a = a.healthScore;
+            b = b.healthScore;
+            if (b < a) {
+              return -1;
+            }
+            if (b > a) {
+              return 1;
+            }
+            return 0;
+          }),
+          activador: true
+        };
+      }
+      break;
     default:
       return { ...state };
   }

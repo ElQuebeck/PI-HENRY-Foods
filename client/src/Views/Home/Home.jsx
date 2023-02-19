@@ -21,13 +21,19 @@ export default function Home() {
   }, [dispatch]);
 
   const diets = useSelector((state) => state.dietsList);
+  const orderValue = [
+    "Alfabeticamente de A-z", 
+    "Alfabeticamente de Z-a", 
+    "Salud de Menor a Mayor", 
+    "Salud de Mayor a Menor"
+  ]
 
   let count = 0;
 
   const [form, setForm] = useState({
     diet: "",
     title: "",
-    order:""
+    order: "",
   });
 
   const changeHandler = (event) => {
@@ -39,23 +45,27 @@ export default function Home() {
 
   const findHandler = (e) => {
     e.preventDefault();
-    if (form.title && form.diet) {
+    if (form.order !== "") {
+      dispatch(orderRecipes(form.order));
+      setForm({...form, order:""})
+    } else if (form.title !== "" && form.diet !== "") {
       console.log("probando ambos");
       dispatch(searchByNameAndFilterByDiet(form.diet, form.title));
-    } else if (form.title) {
+    } else if (form.title !== "") {
       console.log("probando name");
       dispatch(getRecipeByName(form.title));
-    } else if (form.diet) {
+    } else if (form.diet !== "") {
       console.log("probando diet");
       dispatch(getRecipesByDiet(form.diet));
-    } else alert("You must select a diet type or entry the recipe name.");
+    } else alert("No ha seleccionado ningún parámetro para buscar u ordenar");
   };
 
-  const orderHandler = (e) => {
-    const value = e.target.value;
-
-    dispatch(orderRecipes(value));
-  };
+  // const orderHandler = (e) => {
+  //   e.preventDefault();
+  //   if (form.order !== "") {
+  //     dispatch(orderRecipes(form.order));
+  //   } else alert("Debe seleccionar un tipo para ordenar");
+  // };
 
   return (
     <div>
@@ -85,9 +95,9 @@ export default function Home() {
                 <path
                   d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9"
                   stroke="currentColor"
-                  stroke-width="1.333"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.333"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 ></path>
               </svg>
             </div>
@@ -102,11 +112,8 @@ export default function Home() {
             size="1"
             value={form.diet}
             onChange={changeHandler}
-            placeholder="Seleccione la dieta..."
           >
-            <option value="default">
-              Tipo de dieta
-            </option>
+            <option value="">Tipo de dieta</option>
             {diets &&
               diets.map((d) => {
                 return (
@@ -136,9 +143,9 @@ export default function Home() {
                 <path
                   d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9"
                   stroke="currentColor"
-                  stroke-width="1.333"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.333"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 ></path>
               </svg>
             </div>
@@ -146,20 +153,29 @@ export default function Home() {
           <span>Filtrar</span>
         </button>
         <div>
-        <label>Ordenar: </label>          
-            <select name="order" value={form.order} onChange={changeHandler}>
-              <option value="default">Seleccione la preferencia de ordenamiento</option>
-              <option value="a-z">A-z</option>
-              <option value="z-a">Z-a</option>
-              <option value="menor-mayor">Salud de Menor a Mayor</option>
-              <option value="mayor-menor">Salud de Mayor a Menor</option>              
-            </select>          
+          <label>Ordenar: </label>
+          <select
+            id="orderlist"
+            name="order"
+            value={form.order}
+            onChange={changeHandler}
+          >
+            {/* <select onChange={orderHandler} name="order" value={form.order}> */}
+            <option value="">Seleccione la preferencia de ordenamiento</option>
+            {orderValue.map((v) => {
+                return (
+                  <option key={count++} value={v}>
+                    {v}
+                  </option>
+                );
+              })}
+          </select>
         </div>
         <button
           className={style.button}
-          id="order"
-          name="order"
-          onClick={orderHandler}
+          id="ord"
+          name="ordered"
+          onClick={findHandler}
         >
           <div className={style.svg_wrapper_1}>
             <div className={style.svg_wrapper}>
@@ -174,9 +190,9 @@ export default function Home() {
                 <path
                   d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9"
                   stroke="currentColor"
-                  stroke-width="1.333"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.333"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 ></path>
               </svg>
             </div>
