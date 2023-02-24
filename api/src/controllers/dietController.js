@@ -17,33 +17,21 @@ const createDietsListInDb = async () => {
 
 // ------------------> GET-DIET-HANDLER ------------------>
 const getAllDiet = async () => {
-  const apiRecipesRaw = data
-  // const apiRecipesRaw = (
-  //   await axios.get(
-  //     `https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`
-  //   )
-  // ).data.results;
+  // const apiRecipesRaw = data // <----------- DESCOMENTAR (VER ACTIONS Y REPICECONTROLLERS)
+  const apiRecipesRaw = ( // <-------------- COMENTAR BLOQUE
+    await axios.get(
+      `https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`
+    )
+  ).data.results;
   const repeatsDiets = [];
   apiRecipesRaw.map((r) =>
     r.diets.forEach((e) => repeatsDiets.push(e))
-  ); // devuelve [diet1, diet2. diet3...]
+  ); 
       let i = 1
   const arrayDeDiets = [...new Set(repeatsDiets)];
   const result = arrayDeDiets.map((e) => {return {id:i++, name:e}})
   return result
 };
 // <------------------ GET-DIET-HANDLER <------------------
-
-// const getDietDbb = async () => {
-//   const dataBaseDiets = await Diet.findAll();
-//   const dietsUnfiltered = []
-//   dataBaseDiets.map(d => dietsUnfiltered.push(d.diets))
-//   return [...new Set(dietsUnfiltered)]
-// }
-
-
-
-
-
 
 module.exports = { getAllDiet, createDietsListInDb };

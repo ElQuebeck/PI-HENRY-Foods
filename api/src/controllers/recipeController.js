@@ -1,12 +1,17 @@
 const { Recipe } = require("../db");
 const axios = require("axios");
 const { DB_APIKEY } = process.env;
-const data = require("../Auxiliar/datos");
+// const data = require("../Auxiliar/datos"); <--------- DESCOMENTAR
+
+// **_**_**_**_**_**_PASAR DE API A DATA LOCAL**_**_**_**_**_**_** //
+// Descomentar todos y comentar todos - NO olvidar ver ACTIONS
+// Trabajamos con ./Auxiliar/datos
+// **_**_**_**_**_**_PASAR DE API A DATA LOCAL**_**_**_**_**_**_** //
 
 
 // ------------------> POST-CREATE-RECIPE-HANDLER ------------------>
-const createRecipe = async (title, summary, healthScore, steps, diets, image) =>
-  await Recipe.create({
+const createRecipe = async (title, summary, healthScore, steps, diets, image) => { 
+   await Recipe.create({
     title,
     summary,
     healthScore,
@@ -14,40 +19,38 @@ const createRecipe = async (title, summary, healthScore, steps, diets, image) =>
     diets,
     image,
   });
+}// <------------------ POST-CREATE-RECIPE-HANDLER <------------------
 
-
-// <------------------ POST-CREATE-RECIPE-HANDLER <------------------
 
 // ------------------> GET-RECIPE-HANDLER ------------------>
 const getRecipeById = async (id, source) => {
   let recipeRaw =
     source === "api"
-    ? data // <---------------------------------------COMENTAR ESTOOOOOOOO (VER ACTIONS)
-      // ? (
-      //     await axios.get(
-      //       `https://api.spoonacular.com/recipes/${id}/information${DB_APIKEY}`
-      //     )
-      //   ).data
+    // ? data // <--------------------------------------- DESCOMENTAR (VER ACTIONS Y RECIPEDIETS)
+      ? (
+          await axios.get(
+            `https://api.spoonacular.com/recipes/${id}/information${DB_APIKEY}` // COMENTAR BLOQUE
+          )
+        ).data
       : await Recipe.findByPk(id);
  
   if (source === "api") {
-    let filtrado = recipeRaw.filter(r => r.id == id) // <---------------COMENTAR ESTOOOOOOOO (VER ACTIONS)
-    // console.log("LALALAALLALALAL", lalala);
-    // console.log("IDDDDDDDDDDDD", id);
-    var recipe = cleanInfo(filtrado); // <---------- MODIFICAR cleanInfo([recipeRaw]) (VER ACTIONS)
-    //console.log("RECIPEEEEE", recipe);
+    // let filtrado = recipeRaw.filter(r => r.id == id)// <---------------DESCOMENTAR  (VER ACTIONS)
+    // var recipe = cleanInfo(filtrado); // <---------- DESCOMENTAR (VER ACTIONS)
+    var recipe = cleanInfo([recipeRaw]); // <---------- COMENTAR   
   }
   if (source === "api") {
     return recipe[0];
-  } else {
-    // console.log("RECETA FILTRADA DE LA DB POR ID", recipeRaw.dataValues);
+  } else {    
     return recipeRaw;
   }
 };
 // <------------------ GET-RECIPE-HANDLER <------------------
 
+
+
 // ------------------> GET-RECIPES-HANDLER ------------------>
-// *** filtrado de datos ***
+// ***** filtrado de datos ***** //
 const cleanInfo = (arr) =>
   arr.map((e) => {
     return {
@@ -63,28 +66,16 @@ const cleanInfo = (arr) =>
       created: false,
     };
   });
-
-// const cleanSteps = (arr) =>
-// arr[0].steps.map((e) => {
-//   return {
-//     number: e.number,
-//     step: e.step
-//   }
-// })
-//   analyzed[0].steps                      map(x => x.steps.)
-// analyzed = [ { steps = [ { number, step } ] } ]
-// *** filtrado de datos ***
+// ***** filtrado de datos ***** //
 
 const getAllRecipes = async () => {
   const dataBaseRecipes = await Recipe.findAll();
-  const apiRecipesRaw = data; // <-------------- COMENTAR (VER ACTIONS)
-  // console.log("-------------->data", apiRecipesRaw)
-  // const apiRecipesRaw = (
-  //   await axios.get(
-  //     `https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`
-  //   )
-  // ).data.results;
-  // console.log("Deberia ser un array de recetas --->", apiRecipesRaw);
+  // const apiRecipesRaw = data; // <-------------- DESCOMENTAR (VER ACTIONS) 
+  const apiRecipesRaw = (
+    await axios.get(               // COMENTAR BLOQUE
+      `https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`
+    )
+  ).data.results; 
   const apiRecipes = cleanInfo(apiRecipesRaw);
   
   return [...dataBaseRecipes, ...apiRecipes];
@@ -108,13 +99,8 @@ const searchRecipeByDiet = async (diet) => {
     if (allRecipes[i].diets.includes(diet)) filtrado.push(allRecipes[i]);    
   }
 
-  // console.log("FILTRANDOOOOOOOOO",filtrando)
-
   return filtrado;
 };
-/*
-
-*/
 // <------------- GET-RECIPES-HANDLER <-------------
 
 module.exports = {

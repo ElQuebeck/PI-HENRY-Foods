@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useSelector } from "react-redux";
 
 export const GET_RECIPES = "GET_RECIPES";
 export const GET_RECIPE_BY_ID = "GET_RECIPE_BY_ID";
@@ -22,28 +21,22 @@ export const getRecipes = () => {
 export const getRecipeById = (id) => {
   return async (dispatch) => {
     const recipeById = await axios.get(`http://localhost:3001/recipes/${id}`);
-    // const recipe = recipeById.data[0]; // <--------------- DESCOMENTAR (VER RECIPE CONTROLLERS)
-    const recipe = recipeById.data; // <--------------- COMENTAR
-    // console.log("RECIPEEEEEEEE", recipe);
-    // dispatch({ type: GET_RECIPE_BY_ID, payload: recipe }); // <------- DESCOMENTAR
-    dispatch({ type: GET_RECIPE_BY_ID, payload: recipe });
+    // const recipe = recipeById.data[0]; // <--------------- COMENTAR (VER RECIPE CONTROLLERS)
+    const recipe = recipeById.data; // <--------------- DESCOMENTAR   
+    dispatch({ type: GET_RECIPE_BY_ID, payload: recipe });    
   };
 };
 
 export const getRecipeByName = (name) => {
   return async (dispatch) => {
-    const recipesByName = await axios.get(`http://localhost:3001/recipes?name=${name}`);
-        
-    // let filtrando = allRecipesData.filter((r) => r.title.includes(name)); 
-    dispatch({ type: GET_RECIPES_BY_NAME, payload: recipesByName.data }) 
+    const recipesByName = await axios.get(`http://localhost:3001/recipes?name=${name}`);    
+    dispatch({ type: GET_RECIPES_BY_NAME, payload: recipesByName.data })
   };
 }
 
 export const orderRecipes = (orderType) =>{  
   return {type: ORDER_RECIPES, payload: orderType} 
  }
- 
-
 
 export const getRecipesByDiet = (diet) => {
   return async (dispatch) => {

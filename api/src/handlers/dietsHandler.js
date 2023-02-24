@@ -6,7 +6,7 @@ const getDietHandler = async (req, res) => {
     const diets = await getAllDiet();
     res.status(200).json(diets);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: `Error al intentar obtener y cargar la lista de dietas.` });
   }
 };
 

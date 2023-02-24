@@ -107,6 +107,7 @@ export default function Form() {
               value={form.title}
               onChange={changeHandler}
               placeholder="Ingrese el nombre de la receta..."
+              autoComplete="off"
             />
             <p className={styles.danger}>{errors.title}</p>
           </div>
@@ -119,6 +120,7 @@ export default function Form() {
               value={form.summary}
               onChange={changeHandler}
               placeholder="Agregue un resumen de la receta"
+              autoComplete="off"
             />
             <p className={styles.danger}>{errors.summary}</p>
           </div>
@@ -133,6 +135,7 @@ export default function Form() {
               value={form.healthScore}
               onChange={changeHandler}
               placeholder="Ingrese un valor del 1 al 100..."
+              autoComplete="off"
             />
             <p className={styles.danger}>{errors.healthScore}</p>
           </div>
@@ -145,6 +148,7 @@ export default function Form() {
               value={form.steps}
               onChange={changeHandler}
               placeholder="Paso a paso de tu receta..."
+              autoComplete="off"
             />
             <p className={styles.danger}>{errors.steps}</p>
           </div>

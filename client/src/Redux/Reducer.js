@@ -21,7 +21,7 @@ const rootReducer = (state = initialState, action) => {
     case GET_RECIPES_BY_NAME:
       return { ...state, recipes: action.payload };
     case GET_RECIPES:
-      return { ...state, recipes: action.payload };
+      return { ...state, recipeDetail: [], recipes: action.payload };
     case GET_RECIPES_BY_DIET:
       return { ...state, recipes: action.payload };
     case GET_COMB_NAME_AND_DIET:
@@ -30,9 +30,7 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, recipeDetail: action.payload };
     case GET_DIETS:
       return { ...state, dietsList: action.payload };
-    case ORDER_RECIPES:
-      // if (action.payload === "default")
-      //   return { ...state, recipes: state.recipes };
+    case ORDER_RECIPES:   
       if (action.payload === "Alfabeticamente de A-z") {
         return {
           ...state,
@@ -46,11 +44,9 @@ const rootReducer = (state = initialState, action) => {
               return 1;
             }
             return 0;
-          }),
-          activador: true
+          }),          
         };
       }
-
       if (action.payload === "Alfabeticamente de Z-a") {
         return {
           ...state,
@@ -64,11 +60,9 @@ const rootReducer = (state = initialState, action) => {
               return 1;
             }
             return 0;
-          }),
-          activador: true
+          }),          
         };
       }
-
       if (action.payload === "Salud de Menor a Mayor") {
         return {
           ...state,
@@ -82,11 +76,9 @@ const rootReducer = (state = initialState, action) => {
               return 1;
             }
             return 0;
-          }),
-          activador: true
+          }),          
         };
       }
-
       if (action.payload === "Salud de Mayor a Menor") {
         return {
           ...state,
@@ -100,8 +92,7 @@ const rootReducer = (state = initialState, action) => {
               return 1;
             }
             return 0;
-          }),
-          activador: true
+          }),          
         };
       }
       break;

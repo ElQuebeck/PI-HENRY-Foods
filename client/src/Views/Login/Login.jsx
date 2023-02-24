@@ -7,7 +7,7 @@ export default function Login() {
     <div className={style.container_bg}>
       <img className={style.ratatouille_img} src={require("./../../Images/ratatouille.webp").default} alt="Ratatouille" />
       <div>
-        <h1>Bienvenid@ al Recetario de Tuermana</h1>
+        <h1>Bienvenid@ al Recetario de El Quebeck</h1>
         <Link to="/home">
           <button class={style.cta}>
             <span>Empezar</span>

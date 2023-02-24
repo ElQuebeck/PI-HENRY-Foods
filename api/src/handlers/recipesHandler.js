@@ -19,7 +19,7 @@ const getRecipesHandler = async (req, res) => {
       : await getAllRecipes();
     res.status(200).json(result);
   } catch (error) {
-    res.status(401).json({ error: error.message });
+    res.status(404).json({ error: `Error al buscar la/s receta/s` });
   }
 };
 
@@ -32,7 +32,7 @@ const getRecipeHandler = async (req, res) => {
     if (source === "api") res.status(200).json(recipe);
     else res.status(200).json(recipe)
   } catch (error) {
-    res.status(405).json({ error: error.message });
+    res.status(404).json({ error: `No se pudo mostrar la receta especificada` });
   }
 };
 
@@ -40,7 +40,10 @@ const getRecipeHandler = async (req, res) => {
 const createRecipeHandler = async (req, res) => {
   try {
     const { title, summary, healthScore, steps, diets, image } = req.body;
-    await createRecipe(
+    const validate = await Recipe.findOne({ where: { title: title } })
+    if (validate !== null) {
+      res.status(404).send(`La receta ${title} ya existe, ingrese otro nombre!`);
+    } else {await createRecipe(
       title,
       summary,
       healthScore,
@@ -48,18 +51,10 @@ const createRecipeHandler = async (req, res) => {
       diets,
       image
     );
-
-    // await Recipe.create({
-    //   title,
-    //   summary,
-    //   healthScore,
-    //   steps,
-    //   diets,
-    //   image,
-    // });
-    res.status(200).send(`La receta ${title} fue creada exitosamente`);
+    res.status(201).send(`La receta ${title} fue creada exitosamente`);
+    }
   } catch (error) {
-    res.status(403).json({ error: error.message });
+    res.status(400).json({ error: `No fue posible crear la receta.` });
   }
 };
 

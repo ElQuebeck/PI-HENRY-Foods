@@ -9,7 +9,6 @@ import style from "./Detail.module.css";
 export default function Detail() {
   const dispatch = useDispatch();
   let { id } = useParams();
-  // console.log("IIIIIIIIIIIDDDDDDDD", id);
   let counterDts = 1000;
   let counterSteps = 1;
 
@@ -50,6 +49,8 @@ export default function Detail() {
         <h4> Resumen del plato:</h4>
         <p>{recipeDetail.summary && removeTags(recipeDetail.summary)}</p>
       </div>
+
+      
       <div>
         <h4> Preparación: </h4>
         {recipeDetail.created ? (

@@ -5,7 +5,6 @@ import {Link} from "react-router-dom"
 export default function NavBar() {
   return (
     <div className={style.mainContainer}>
-      <Link className={style.logo} to="/home"> <img src={require("./../../Images/logo.webp").default} alt="" /> </Link>
       <Link className={style.btnCustom} to="/home">
         <button className={style.cssbuttons_io_button}> Volver al Home
           <div className={style.icon}>
@@ -13,6 +12,7 @@ export default function NavBar() {
           </div>
         </button>
       </Link>
+      <Link className={style.logo} to="/home"> <img src={require("./../../Images/logo.webp").default} alt="" /> </Link>
       <Link className={style.btnCustom} to="/create">
         <button className={style.cssbuttons_io_button}> Nueva Receta
           <div className={style.icon}>
