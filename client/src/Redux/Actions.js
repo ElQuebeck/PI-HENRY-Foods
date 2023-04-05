@@ -21,8 +21,8 @@ export const getRecipes = () => {
 export const getRecipeById = (id) => {
   return async (dispatch) => {
     const recipeById = await axios.get(`/recipes/${id}`);
-    // const recipe = recipeById.data[0]; // <--------------- COMENTAR (VER RECIPE CONTROLLERS)
-    const recipe = recipeById.data; // <--------------- DESCOMENTAR   
+    const recipe = recipeById.data[0]; // <--------------- COMENTAR (VER RECIPE CONTROLLERS)
+    // const recipe = recipeById.data; // <--------------- DESCOMENTAR   
     dispatch({ type: GET_RECIPE_BY_ID, payload: recipe });    
   };
 };

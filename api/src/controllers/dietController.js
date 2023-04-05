@@ -17,12 +17,12 @@ const createDietsListInDb = async () => {
 
 // ------------------> GET-DIET-HANDLER ------------------>
 const getAllDiet = async () => {
-  // const apiRecipesRaw = data // <----------- DESCOMENTAR (VER ACTIONS Y REPICECONTROLLERS)
-  const apiRecipesRaw = ( // <-------------- COMENTAR BLOQUE
-    await axios.get(
-      `https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`
-    )
-  ).data.results;
+  const apiRecipesRaw = data // <----------- DESCOMENTAR (VER ACTIONS Y REPICECONTROLLERS)
+  // const apiRecipesRaw = ( // <-------------- COMENTAR BLOQUE
+  //   await axios.get(
+  //     `https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`
+  //   )
+  // ).data.results;
   const repeatsDiets = [];
   apiRecipesRaw.map((r) =>
     r.diets.forEach((e) => repeatsDiets.push(e))

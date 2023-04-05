@@ -1,7 +1,7 @@
 const { Recipe } = require("../db");
 const axios = require("axios");
 const { DB_APIKEY } = process.env;
-// const data = require("../Auxiliar/datos"); <--------- DESCOMENTAR
+const data = require("../Auxiliar/datos"); // <--------- DESCOMENTAR
 
 // **_**_**_**_**_**_PASAR DE API A DATA LOCAL**_**_**_**_**_**_** //
 // Descomentar todos y comentar todos - NO olvidar ver ACTIONS
@@ -26,18 +26,18 @@ const createRecipe = async (title, summary, healthScore, steps, diets, image) =>
 const getRecipeById = async (id, source) => {
   let recipeRaw =
     source === "api"
-    // ? data // <--------------------------------------- DESCOMENTAR (VER ACTIONS Y RECIPEDIETS)
-      ? (
-          await axios.get(
-            `https://api.spoonacular.com/recipes/${id}/information${DB_APIKEY}` // COMENTAR BLOQUE
-          )
-        ).data
+    ? data // <--------------------------------------- DESCOMENTAR (VER ACTIONS Y RECIPEDIETS)
+      // ? (
+      //     await axios.get(
+      //       `https://api.spoonacular.com/recipes/${id}/information${DB_APIKEY}` // COMENTAR BLOQUE
+      //     )
+      //   ).data
       : await Recipe.findByPk(id);
  
   if (source === "api") {
-    // let filtrado = recipeRaw.filter(r => r.id == id)// <---------------DESCOMENTAR  (VER ACTIONS)
-    // var recipe = cleanInfo(filtrado); // <---------- DESCOMENTAR (VER ACTIONS)
-    var recipe = cleanInfo([recipeRaw]); // <---------- COMENTAR   
+    let filtrado = recipeRaw.filter(r => r.id == id)// <---------------DESCOMENTAR  (VER ACTIONS)
+    var recipe = cleanInfo(filtrado); // <---------- DESCOMENTAR (VER ACTIONS)
+    // var recipe = cleanInfo([recipeRaw]); // <---------- COMENTAR   
   }
   if (source === "api") {
     return recipe[0];
@@ -70,12 +70,12 @@ const cleanInfo = (arr) =>
 
 const getAllRecipes = async () => {
   const dataBaseRecipes = await Recipe.findAll();
-  // const apiRecipesRaw = data; // <-------------- DESCOMENTAR (VER ACTIONS) 
-  const apiRecipesRaw = (
-    await axios.get(               // COMENTAR BLOQUE
-      `https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`
-    )
-  ).data.results; 
+  const apiRecipesRaw = data; // <-------------- DESCOMENTAR (VER ACTIONS) 
+  // const apiRecipesRaw = (
+  //   await axios.get(               // COMENTAR BLOQUE
+  //     `https://api.spoonacular.com/recipes/complexSearch${DB_APIKEY}&addRecipeInformation=true&number=100`
+  //   )
+  // ).data.results; 
   const apiRecipes = cleanInfo(apiRecipesRaw);
   
   return [...dataBaseRecipes, ...apiRecipes];
