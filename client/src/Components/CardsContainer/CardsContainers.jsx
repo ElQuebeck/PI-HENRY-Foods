@@ -18,7 +18,7 @@ export default function CardsContainer() {
   return (
     <>
       <div className={style.container}>
-        {recipesList.map((r) => {
+        {recipesList?.map((r) => {
           return (
             <Card
               id={r.id}
