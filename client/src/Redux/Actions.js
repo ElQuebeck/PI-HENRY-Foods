@@ -12,7 +12,7 @@ export const ORDER_RECIPES = "ORDER_RECIPES"
 
 export const getRecipes = () => { 
   return async (dispatch) => {
-    const apiAndDbData = await axios.get(`http://localhost:3001/recipes`);
+    const apiAndDbData = await axios.get(`/recipes`);
     const recipes = apiAndDbData.data;
     dispatch({ type: GET_RECIPES, payload: recipes });
   };
@@ -20,7 +20,7 @@ export const getRecipes = () => {
 
 export const getRecipeById = (id) => {
   return async (dispatch) => {
-    const recipeById = await axios.get(`http://localhost:3001/recipes/${id}`);
+    const recipeById = await axios.get(`/recipes/${id}`);
     // const recipe = recipeById.data[0]; // <--------------- COMENTAR (VER RECIPE CONTROLLERS)
     const recipe = recipeById.data; // <--------------- DESCOMENTAR   
     dispatch({ type: GET_RECIPE_BY_ID, payload: recipe });    
@@ -29,7 +29,7 @@ export const getRecipeById = (id) => {
 
 export const getRecipeByName = (name) => {
   return async (dispatch) => {
-    const recipesByName = await axios.get(`http://localhost:3001/recipes?name=${name}`);    
+    const recipesByName = await axios.get(`/recipes?name=${name}`);    
     dispatch({ type: GET_RECIPES_BY_NAME, payload: recipesByName.data })
   };
 }
@@ -41,7 +41,7 @@ export const orderRecipes = (orderType) =>{
 export const getRecipesByDiet = (diet) => {
   return async (dispatch) => {
     const recipesByDiet = await axios.get(
-      `http://localhost:3001/recipes?diet=${diet}`
+      `/recipes?diet=${diet}`
     );    
     dispatch({ type: GET_RECIPES_BY_DIET, payload: recipesByDiet.data });
   };
@@ -49,7 +49,7 @@ export const getRecipesByDiet = (diet) => {
 
 export const searchByNameAndFilterByDiet = (diet, name) => {
   return async (dispatch) => {    
-    const recipesByName = await axios.get(`http://localhost:3001/recipes?name=${name}`);    
+    const recipesByName = await axios.get(`/recipes?name=${name}`);    
     const filtrando = [];
     for (let i = 0; i < recipesByName.data.length; i++) {
       if (recipesByName.data[i].diets.includes(diet)) filtrando.push(recipesByName.data[i]);
@@ -60,7 +60,7 @@ export const searchByNameAndFilterByDiet = (diet, name) => {
 
 export const getDiets = () => {
   return async (dispatch) => {
-    const dietsList = await axios.get(`http://localhost:3001/diets`);
+    const dietsList = await axios.get(`/diets`);
     dispatch({ type: GET_DIETS, payload: dietsList.data });
   };
 };
